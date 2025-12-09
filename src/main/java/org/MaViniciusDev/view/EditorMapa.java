@@ -16,7 +16,8 @@ import javafx.stage.Stage;
 
 public class EditorMapa extends Application {
     private int[][] mapa;
-    private int largura = 128, altura = 72;
+    private final int largura = 128;
+    private final int altura = 72;
     private boolean modoInicio = false;
     private boolean desenhando = false;
     private Canvas canvas;
@@ -56,19 +57,17 @@ public class EditorMapa extends Application {
             }
         });
 
-        canvas.setOnMouseReleased(e -> {
-            desenhando = false;
-        });
+        canvas.setOnMouseReleased(_ -> desenhando = false);
 
         // Controles
         Button modoInicioBtn = new Button("Modo Desenho");
-        modoInicioBtn.setOnAction(e -> {
+        modoInicioBtn.setOnAction(_ -> {
             modoInicio = !modoInicio;
             modoInicioBtn.setText(modoInicio ? "Modo Início (Clique no mapa)" : "Modo Desenho");
         });
 
         Button salvarBtn = new Button("Salvar Mapa");
-        salvarBtn.setOnAction(e -> salvarMapa());
+        salvarBtn.setOnAction(_ -> salvarMapa());
 
         // Slider para tamanho do pincel
         Label labelPincel = new Label("Tamanho do Pincel: 1");
@@ -77,7 +76,7 @@ public class EditorMapa extends Application {
         sliderPincel.setShowTickMarks(true);
         sliderPincel.setMajorTickUnit(1);
         sliderPincel.setBlockIncrement(1);
-        sliderPincel.valueProperty().addListener((obs, oldVal, newVal) -> {
+        sliderPincel.valueProperty().addListener((_, _, newVal) -> {
             tamanhoPincel = newVal.intValue();
             labelPincel.setText("Tamanho do Pincel: " + tamanhoPincel);
         });
@@ -94,12 +93,12 @@ public class EditorMapa extends Application {
         Scene scene = new Scene(vbox, 1280, 820);
 
         // Redimensiona o canvas quando a janela mudar de tamanho
-        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
+        scene.widthProperty().addListener((_, _, newVal) -> {
             canvas.setWidth(newVal.doubleValue());
             redesenharMapa();
         });
 
-        scene.heightProperty().addListener((obs, oldVal, newVal) -> {
+        scene.heightProperty().addListener((_, _, newVal) -> {
             canvas.setHeight(newVal.doubleValue() - 100);
             redesenharMapa();
         });
