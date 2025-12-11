@@ -11,7 +11,4 @@ public class Main extends Application {
         new EditorMapa().start(primaryStage);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
