@@ -61,6 +61,7 @@ public class Jogo {
     private Label wrongWayLabel;
     private boolean raceFinished = false;
     private boolean hasLeftStartZone = false;
+    private boolean raceStarted = false; // Flag para indicar que a corrida começou (primeira passagem pela linha)
     private boolean canCountLap = false; // Flag para garantir que só conta uma volta por cruzamento
     private double startX, startY;
     private double forwardDirX, forwardDirY; // Direção esperada de progresso
@@ -639,7 +640,14 @@ public class Jogo {
         if (lastFrameAboveLine != isAboveLine && isOnStartLine) {
             // Apenas conta se o carro está se movendo para frente e se pode contar
             if (canCountLap && carro.getSpeed() > 20.0) { // Velocidade mínima para contar volta
-                onLineCrossed();
+                if (!raceStarted) {
+                    // Primeira vez que cruza a linha após sair da zona inicial = início da corrida
+                    raceStarted = true;
+                    System.out.println("Corrida iniciada!");
+                } else {
+                    // Volta completada
+                    onLineCrossed();
+                }
                 canCountLap = false; // Bloqueia contagem até sair da linha novamente
             }
             lastFrameAboveLine = isAboveLine;
@@ -819,6 +827,7 @@ public class Jogo {
     private void resetRace() {
         currentLap = 0;
         raceFinished = false;
+        raceStarted = false;
         lastFrameAboveLine = true;
         hasLeftStartZone = false;
         canCountLap = false;
