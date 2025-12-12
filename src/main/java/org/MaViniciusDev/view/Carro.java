@@ -168,6 +168,18 @@ public class Carro extends Group {
 
     // Getters
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
     public double getSpeed() {
         return speed;
     }
