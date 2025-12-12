@@ -35,7 +35,12 @@ public class Carro extends Group {
     private ImageView crashView;
     private double rotationOffset = 0;
 
-    private final double maxForwardSpeed = 300;
+    // Physics parameters
+    private static final double ACCELERATION = 200.0;
+    private static final double BRAKING_FORCE = 300.0;
+    private static final double MAX_FORWARD_SPEED = 300.0;
+    private static final double MAX_REVERSE_SPEED = -100.0;
+    private static final double DRAG = 40.0;
 
     // Control state
     private double throttleInput = 0;
@@ -172,7 +177,7 @@ public class Carro extends Group {
     }
 
     public double getMaxForwardSpeed() {
-        return maxForwardSpeed;
+        return MAX_FORWARD_SPEED;
     }
 
     // Control inputs
@@ -383,28 +388,24 @@ public class Carro extends Group {
     private double calculateAcceleration() {
         double accel = 0;
 
-        // Physics parameters
-        double acceleration = 200;
         if (throttleInput > 0) {
-            accel = throttleInput * acceleration;
+            accel = throttleInput * ACCELERATION;
         } else if (throttleInput < 0) {
-            accel = throttleInput * acceleration;
+            accel = throttleInput * ACCELERATION;
         }
 
         if (braking) {
-            double brakingForce = 300;
             if (speed > 0) {
-                accel -= brakingForce;
+                accel -= BRAKING_FORCE;
             } else if (speed < 0) {
-                accel += brakingForce;
+                accel += BRAKING_FORCE;
             }
         }
 
-        double drag = 40;
         if (speed > 0) {
-            accel -= drag;
+            accel -= DRAG;
         } else if (speed < 0) {
-            accel += drag;
+            accel += DRAG;
         }
 
         return accel;
@@ -413,9 +414,8 @@ public class Carro extends Group {
     private void applyPhysics(double accel, double dt) {
         speed += accel * dt;
 
-        if (speed > maxForwardSpeed) speed = maxForwardSpeed;
-        double maxReverseSpeed = -100;
-        if (speed < maxReverseSpeed) speed = maxReverseSpeed;
+        if (speed > MAX_FORWARD_SPEED) speed = MAX_FORWARD_SPEED;
+        if (speed < MAX_REVERSE_SPEED) speed = MAX_REVERSE_SPEED;
     }
 
     private void moveCarOrDestroy(double dt) {
