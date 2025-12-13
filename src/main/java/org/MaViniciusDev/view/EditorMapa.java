@@ -149,10 +149,14 @@ public class EditorMapa extends Application {
         Button reiniciarBtn = new Button("Reiniciar Mapa");
         reiniciarBtn.setOnAction(_ -> reiniciarMapa());
 
-        Button iniciarJogoBtn = new Button("Iniciar Jogo");
+        Button iniciarJogoBtn = new Button("Jogar Manualmente 🎮");
         iniciarJogoBtn.setOnAction(_ -> iniciarJogo());
 
-        HBox controles = new HBox(10, modoInicioBtn, salvarBtn, reiniciarBtn, iniciarJogoBtn);
+        // --- BOTÃO ADICIONADO ---
+        Button treinarIABtn = new Button("Treinar IA 🧬");
+        treinarIABtn.setOnAction(_ -> iniciarTreinamento());
+
+        HBox controles = new HBox(10, modoInicioBtn, salvarBtn, reiniciarBtn, iniciarJogoBtn, treinarIABtn);
         controles.setPadding(new Insets(10));
         return controles;
     }
@@ -182,6 +186,16 @@ public class EditorMapa extends Application {
             new Jogo().setup(stage, mapa, inicioX, inicioY, direcao, this);
         } else {
             System.out.println("Defina o ponto de início primeiro!");
+        }
+    }
+
+    // --- MÉTODO NOVO ---
+    private void iniciarTreinamento() {
+        if (inicioX != null && inicioY != null) {
+            System.out.println("Iniciando Algoritmo Genético...");
+            new TreinamentoIA().setup(stage, mapa, inicioX, inicioY, direcao, this);
+        } else {
+            System.out.println("⚠️ ERRO: Defina o ponto de início (Modo Início) antes de treinar!");
         }
     }
 
@@ -242,21 +256,21 @@ public class EditorMapa extends Application {
         double deg = Math.toDegrees(angle);
 
         if (deg >= -22.5 && deg < 22.5) {
-            return 2; // direita
+            return 2;
         } else if (deg >= 22.5 && deg < 67.5) {
-            return 3; // baixo-direita
+            return 3;
         } else if (deg >= 67.5 && deg < 112.5) {
-            return 4; // baixo
+            return 4;
         } else if (deg >= 112.5 && deg < 157.5) {
-            return 5; // baixo-esquerda
+            return 5;
         } else if (deg >= 157.5 || deg < -157.5) {
-            return 6; // esquerda
+            return 6;
         } else if (deg >= -157.5 && deg < -112.5) {
-            return 7; // cima-esquerda
+            return 7;
         } else if (deg >= -112.5 && deg < -67.5) {
-            return 0; // cima
+            return 0;
         } else {
-            return 1; // cima-direita
+            return 1;
         }
     }
 
@@ -295,10 +309,10 @@ public class EditorMapa extends Application {
 
         gc.setFill(Color.DARKGREEN);
         gc.fillOval(
-            inicioX * cellWidth + cellWidth * 0.25,
-            inicioY * cellHeight + cellHeight * 0.25,
-            cellWidth * 0.5,
-            cellHeight * 0.5
+                inicioX * cellWidth + cellWidth * 0.25,
+                inicioY * cellHeight + cellHeight * 0.25,
+                cellWidth * 0.5,
+                cellHeight * 0.5
         );
     }
 
@@ -334,14 +348,14 @@ public class EditorMapa extends Application {
 
     private double getAnguloFromDirecao(int dir) {
         return switch (dir) {
-            case 0 -> 270.0; // cima
-            case 1 -> 315.0; // cima-direita
-            case 2 -> 0.0;   // direita
-            case 3 -> 45.0;  // baixo-direita
-            case 4 -> 90.0;  // baixo
-            case 5 -> 135.0; // baixo-esquerda
-            case 6 -> 180.0; // esquerda
-            case 7 -> 225.0; // cima-esquerda
+            case 0 -> 270.0;
+            case 1 -> 315.0;
+            case 2 -> 0.0;
+            case 3 -> 45.0;
+            case 4 -> 90.0;
+            case 5 -> 135.0;
+            case 6 -> 180.0;
+            case 7 -> 225.0;
             default -> 0.0;
         };
     }
@@ -397,7 +411,7 @@ public class EditorMapa extends Application {
         }
 
         System.out.println("Mapa salvo! Início: (" + inicioX + ", " + inicioY +
-                         "), Direção: " + getDirecaoString(direcao));
+                "), Direção: " + getDirecaoString(direcao));
     }
 
     private void reiniciarMapa() {
